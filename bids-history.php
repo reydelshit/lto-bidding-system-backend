@@ -23,7 +23,7 @@ switch ($method) {
                         WHERE product_id = a.product_id
                         ORDER BY amount_bid DESC
                         LIMIT 1
-                    ) = 11 THEN 1
+                    ) = :account_id  THEN 1
                     ELSE 2
                 END AS status
             FROM
