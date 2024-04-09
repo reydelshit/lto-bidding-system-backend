@@ -26,7 +26,34 @@ switch ($method) {
         }
 
         if (isset($_GET['bid_logs'])) {
-            $sql = "SELECT bidding.account_id, user_accounts.username,  product.product_name, product.image_path, bidding.bidding_id,  bidding.amount_bid , bidding.createdOn FROM bidding INNER JOIN product ON product.product_id = bidding.product_id INNER JOIN user_accounts ON user_accounts.account_id = bidding.account_id WHERE bidding.product_id = :product_id";
+            $sql = "SELECT 
+                bidding.account_id, 
+                user_accounts.username,  
+                user_accounts.first_name,
+                user_accounts.last_name,  
+
+                product.product_name, 
+                product.image_path, 
+                bidding.bidding_id,  
+                bidding.amount_bid, 
+                bidding.createdOn 
+            FROM 
+                bidding 
+            INNER JOIN 
+                product ON product.product_id = bidding.product_id 
+            INNER JOIN 
+                user_accounts ON user_accounts.account_id = bidding.account_id 
+            WHERE 
+                bidding.product_id = :product_id 
+            GROUP BY 
+                bidding.account_id, 
+                user_accounts.username,  
+                product.product_name, 
+                product.image_path, 
+                bidding.bidding_id, 
+                bidding.createdOn 
+            ORDER BY 
+                MAX(bidding.amount_bid) DESC;";
 
             if (isset($sql)) {
                 $stmt = $conn->prepare($sql);
