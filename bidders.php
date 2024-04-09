@@ -11,37 +11,29 @@ switch ($method) {
     case "GET":
 
 
-        if (isset($_GET['user_id'])) {
-            $user_id = $_GET['user_id'];
-            $sql = "SELECT * FROM user_accounts WHERE user_id = :user_id";
-        }
-
-        if (isset($_GET['account_id_id'])) {
-            $account_id_id_spe = $_GET['account_id_id'];
-            $sql = "SELECT * FROM user_accounts WHERE account_id_id = :account_id_id";
+        if (isset($_GET['account_id'])) {
+            $account_id = $_GET['account_id'];
+            $sql = "SELECT * FROM user_accounts WHERE account_id = :account_id";
         }
 
 
-        if (!isset($_GET['product_id']) && !isset($_GET['user_id'])) {
-            $sql = "SELECT * FROM user_accounts ORDER BY account_id DESC ";
+        if (!isset($_GET['account_id']) && !isset($_GET['account_id'])) {
+            $sql = "SELECT * FROM user_accounts LEFT JOIN vip ON vip.account_id = user_accounts.account_id";
         }
 
 
         if (isset($sql)) {
             $stmt = $conn->prepare($sql);
 
-            if (isset($product_id_spe)) {
-                $stmt->bindParam(':product_id', $product_id_spe);
-            }
 
-            if (isset($user_id)) {
-                $stmt->bindParam(':user_id', $user_id);
+            if (isset($account_id)) {
+                $stmt->bindParam(':account_id', $account_id);
             }
 
             $stmt->execute();
-            $product = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $bidders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            echo json_encode($product);
+            echo json_encode($bidders);
         }
 
 

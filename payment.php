@@ -82,25 +82,4 @@ switch ($method) {
 
         echo json_encode($response);
         break;
-
-    case "DELETE":
-        $product = json_decode(file_get_contents('php://input'));
-        $sql = "DELETE FROM product WHERE product_id = :product_id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':product_id', $product->product_id);
-
-        if ($stmt->execute()) {
-            $response = [
-                "status" => "success",
-                "message" => "product deleted successfully"
-            ];
-        } else {
-            $response = [
-                "status" => "error",
-                "message" => "product delete failed"
-            ];
-        }
-
-        echo json_encode($response);
-        break;
 }

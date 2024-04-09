@@ -54,8 +54,8 @@ switch ($method) {
 
     case "POST":
         $product = json_decode(file_get_contents('php://input'));
-        $sql = "INSERT INTO product (product_id, product_name, brand_name, year_model, description, product_condition, regular_price, starting_price, date_until, image_path, created_on) 
-                VALUES (null, :product_name, :brand_name, :year_model, :description, :product_condition, :regular_price, :starting_price, :date_until, :image_path, :created_on)";
+        $sql = "INSERT INTO product (product_id, product_name, brand_name, is_vip, year_model, description, product_condition, regular_price, starting_price, date_until, image_path, created_on) 
+                VALUES (null, :product_name, :brand_name, :year_model, :is_vip, :description, :product_condition, :regular_price, :starting_price, :date_until, :image_path, :created_on)";
 
         $stmt = $conn->prepare($sql);
         $created_on = date('Y-m-d');
@@ -69,6 +69,8 @@ switch ($method) {
         $stmt->bindParam(':date_until', $product->date_until);
         $stmt->bindParam(':image_path', $product->image_path);
         $stmt->bindParam(':created_on', $created_on);
+        $stmt->bindParam(':is_vip', $product->is_vip);
+
 
         if ($stmt->execute()) {
             $response = [

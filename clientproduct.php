@@ -13,6 +13,7 @@ switch ($method) {
         $sql = "SELECT
         a.product_id,
         a.product_name,
+        a.is_vip,
         a.regular_price,
         a.starting_price,
         a.date_until,
