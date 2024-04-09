@@ -10,38 +10,36 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case "GET":
 
-
-        if (isset($_GET['user_id'])) {
-            $user_id = $_GET['user_id'];
-            $sql = "SELECT * FROM user_accounts WHERE user_id = :user_id";
-        }
-
-        if (isset($_GET['account_id_id'])) {
-            $account_id_id_spe = $_GET['account_id_id'];
-            $sql = "SELECT * FROM user_accounts WHERE account_id_id = :account_id_id";
-        }
-
-
-        if (!isset($_GET['product_id']) && !isset($_GET['user_id'])) {
-            $sql = "SELECT * FROM user_accounts ORDER BY account_id DESC ";
-        }
+        $sql = "SELECT
+        a.product_id,
+        a.product_name,
+        a.brand_name,
+        a.year_model,
+        a.product_condition,
+        a.regular_price,
+        a.starting_price,
+        a.date_until,
+        a.image_path,
+        c.account_id,
+        COUNT(b.bidding_id) as cnt,
+        IFNULL(MAX(b.amount_bid), 0) as amt,
+        
+        a.date_until,
+        IFNULL(CONCAT(c.last_name,'',c.first_name,'',LEFT(c.middle_name,1)),'No bidder') as fname
+        FROM product a LEFT JOIN 
+        bidding b ON a.product_id=b.product_id
+        LEFT JOIN user_accounts c ON b.account_id = c.account_id
+        group by a.product_id
+        order by a.created_on asc";
 
 
         if (isset($sql)) {
             $stmt = $conn->prepare($sql);
 
-            if (isset($product_id_spe)) {
-                $stmt->bindParam(':product_id', $product_id_spe);
-            }
-
-            if (isset($user_id)) {
-                $stmt->bindParam(':user_id', $user_id);
-            }
-
             $stmt->execute();
-            $product = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $bidding = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            echo json_encode($product);
+            echo json_encode($bidding);
         }
 
 
