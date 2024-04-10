@@ -18,7 +18,9 @@ switch ($method) {
 
 
         if (!isset($_GET['account_id']) && !isset($_GET['account_id'])) {
-            $sql = "SELECT * FROM user_accounts LEFT JOIN vip ON vip.account_id = user_accounts.account_id";
+            $sql = "SELECT user_accounts.*, vip.vip_id
+            FROM user_accounts
+            LEFT JOIN vip ON vip.account_id = user_accounts.account_id";
         }
 
 
