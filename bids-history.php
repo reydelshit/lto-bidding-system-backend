@@ -15,6 +15,7 @@ switch ($method) {
                 a.date_until,
                 payment.status AS payment_status,
                 a.product_name,
+                a.product_id,
                 CASE
                     WHEN a.date_until >= NOW() THEN 0
                     WHEN (
